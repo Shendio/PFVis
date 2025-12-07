@@ -6,8 +6,8 @@ Grid::Grid() {
     m_nodes.resize(s_gridSize * s_gridSize);
 
     for (size_t i = 0; i < s_gridSize * s_gridSize; ++i) {
-        int x = s_gridSize % i;
-        int y = s_gridSize / i;
+        int x = i % s_gridSize;
+        int y = i / s_gridSize;
         m_nodes[i].x = x;
         m_nodes[i].y = y;
     }
