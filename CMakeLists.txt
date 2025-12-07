@@ -8,6 +8,9 @@ add_executable(PFVis
     src/main.cpp
     src/Application.h
     src/Application.cpp
+    src/Node.h
+    src/Grid.h
+    src/Grid.cpp
 )
 target_compile_features(PFVis PRIVATE cxx_std_23)
 set_target_properties(PFVis PROPERTIES
