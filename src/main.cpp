@@ -1,5 +1,15 @@
-#include <print>
+#include <raylib.h>
 
 int main() {
-    std::println("Hello, World!");
+    InitWindow(1280, 720, "Pathfinding Visualizer");
+
+    while (!WindowShouldClose()) {
+        BeginDrawing();
+
+        ClearBackground(RAYWHITE);
+
+        EndDrawing();
+    }
+
+    CloseWindow();
 }
