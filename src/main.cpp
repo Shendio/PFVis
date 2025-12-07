@@ -1,15 +1,6 @@
-#include <raylib.h>
+#include "Application.h"
 
 int main() {
-    InitWindow(1280, 720, "Pathfinding Visualizer");
-
-    while (!WindowShouldClose()) {
-        BeginDrawing();
-
-        ClearBackground(RAYWHITE);
-
-        EndDrawing();
-    }
-
-    CloseWindow();
+    Application app;
+    app.run();
 }
