@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Grid.h"
+
 class Application {
 public:
     Application();
@@ -9,4 +11,9 @@ public:
     Application& operator=(const Application& other) = delete;
 
     void run();
+
+private:
+    void drawGUI();
+
+    Grid m_grid;
 };

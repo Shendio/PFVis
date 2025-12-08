@@ -13,6 +13,8 @@ public:
     void setStart(int x, int y);
     void setEnd(int x, int y);
 
+    void draw();
+
 private:
     std::vector<Node> m_nodes;
     Node* m_startNode = nullptr;
