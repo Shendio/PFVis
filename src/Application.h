@@ -2,6 +2,13 @@
 
 #include "Grid.h"
 
+enum class Algorithm : uint8_t {
+    BFS,
+    DFS,
+    Dijkstra,
+    Astar
+};
+
 class Application {
 public:
     Application();
@@ -16,4 +23,7 @@ private:
     void drawGUI();
 
     Grid m_grid;
+
+    bool m_dropdown_active = false;
+    Algorithm m_chosen_algorithm = Algorithm::BFS;
 };

@@ -1,5 +1,4 @@
 #include "Grid.h"
-
 #include "Constants.h"
 #include "Node.h"
 
@@ -32,6 +31,10 @@ void Grid::setStart(int x, int y) {
         m_startNode->state = NodeState::Empty;
     }
 
+    // Convert screen coords to grid coords
+    x = ScreenToGrid(x);
+    y = ScreenToGrid(y);
+
     if (int nodeIndex = TwoDtoOneD(x, y); nodeIndex != -1) {
         m_startNode = &m_nodes[nodeIndex];
         m_startNode->state = NodeState::Start;
@@ -43,9 +46,22 @@ void Grid::setEnd(int x, int y) {
         m_endNode->state = NodeState::Empty;
     }
 
+    // Convert screen coords to grid coords
+    x = ScreenToGrid(x);
+    y = ScreenToGrid(y);
+
     if (int nodeIndex = TwoDtoOneD(x, y); nodeIndex != -1) {
         m_endNode = &m_nodes[nodeIndex];
         m_endNode->state = NodeState::End;
+    }
+}
+
+void Grid::paint(int x, int y, NodeState state) {
+    x = ScreenToGrid(x);
+    y = ScreenToGrid(y);
+
+    if (int nodeIndex = TwoDtoOneD(x, y); nodeIndex != -1) {
+        m_nodes[nodeIndex].state = state;
     }
 }
 
