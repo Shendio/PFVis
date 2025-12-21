@@ -15,6 +15,18 @@ Grid::Grid() {
     }
 }
 
+void Grid::reset() {
+    for (auto& node : m_nodes) {
+        node.reset();
+        if (&node == m_startNode) {
+            node.state = NodeState::Start;
+        }
+        if (&node == m_endNode) {
+            node.state = NodeState::End;
+        }
+    }
+}
+
 const bool Grid::isValidIndex(int x, int y) const {
     return (x < c_gridSize && y < c_gridSize && x >= 0 && y >= 0);
 }
@@ -54,6 +66,27 @@ void Grid::setEnd(int x, int y) {
         m_endNode = &m_nodes[nodeIndex];
         m_endNode->state = NodeState::End;
     }
+}
+
+Node* Grid::getNode(int x, int y) {
+    if (int nodeIndex = TwoDtoOneD(x, y); nodeIndex != -1) {
+        return &m_nodes[nodeIndex];
+    }
+    return nullptr;
+}
+
+std::vector<Node*> Grid::getNeighbors(Node* n) {
+    std::vector<Node*> outVec;
+    int dx[] = {0, 0, 1, -1};
+    int dy[] = {1, -1, 0, 0};
+
+    for (size_t i = 0; i < 4; ++i) {
+        Node* neighbor = getNode(n->x + dx[i], n->y + dy[i]);
+        if (neighbor && neighbor->state != NodeState::Wall) {
+            outVec.push_back(neighbor);
+        }
+    }
+    return outVec;
 }
 
 void Grid::paint(int x, int y, NodeState state) {
