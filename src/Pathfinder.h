@@ -11,6 +11,7 @@ public:
     virtual void initialize() = 0;
     virtual bool step() = 0;
 
+protected:
     void reconstructPath(Node* end) {
         Node* curr = end;
 
@@ -22,7 +23,6 @@ public:
         }
     }
 
-protected:
     Grid& m_grid;
     bool m_finished = false;
 };

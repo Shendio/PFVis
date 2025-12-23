@@ -1,12 +1,12 @@
 #include "Application.h"
 #include "Constants.h"
+#include "BfsPathfinder.h"
+#include "DfsPathfinder.h"
+#include "HeuristicPathfinder.h"
 
 #include "raylib.h"
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
-
-#include "BfsPathfinder.h"
-#include "DfsPathfinder.h"
 
 Application::Application() {
     InitWindow(c_defaultWidth, c_defaultHeight, c_defaultTitle.data());
@@ -28,21 +28,7 @@ void Application::update() {
     if (!m_running && !m_dropdown_active) {
         auto mouse_pos = GetMousePosition();
 
-        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            m_grid.paint(static_cast<int>(mouse_pos.x), static_cast<int>(mouse_pos.y), NodeState::Wall);
-        }
-
-        if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
-            m_grid.paint(static_cast<int>(mouse_pos.x), static_cast<int>(mouse_pos.y), NodeState::Empty);
-        }
-
-        if (IsKeyPressed(KEY_S)) {
-            m_grid.setStart(static_cast<int>(mouse_pos.x), static_cast<int>(mouse_pos.y));
-        }
-
-        if (IsKeyPressed(KEY_T)) {
-            m_grid.setEnd(static_cast<int>(mouse_pos.x), static_cast<int>(mouse_pos.y));
-        }
+        m_grid.handleInput(static_cast<int>(mouse_pos.x), static_cast<int>(mouse_pos.y));
     }
 
     if (m_running && m_pathfinder) {
@@ -66,7 +52,7 @@ void Application::drawGUI() {
     DrawRectangle(c_defaultWidth - c_menuWidth, 0, c_menuWidth, c_defaultHeight, {0, 60, 130, 255});
 
     if (GuiButton({850, 50, 200, 50}, m_running ? "Stop" : "Start")) {
-        if (!m_running) {
+        if (!m_running && m_grid.getStart() && m_grid.getEnd()) {
             switch (m_chosen_algorithm) {
             case Algorithm::BFS:
                 m_pathfinder = std::make_unique<BfsPathfinder>(m_grid);
@@ -74,8 +60,14 @@ void Application::drawGUI() {
             case Algorithm::DFS:
                 m_pathfinder = std::make_unique<DfsPathfinder>(m_grid);
                 break;
-            default:
+            case Algorithm::Dijkstra:
+                m_pathfinder = std::make_unique<DijkstraPathfinder>(m_grid);
                 break;
+            case Algorithm::Astar:
+                m_pathfinder = std::make_unique<AStarPathfinder>(m_grid);
+                break;
+            default:
+                std::unreachable();
             }
             m_pathfinder->initialize();
             m_running = true;

@@ -3,7 +3,7 @@
 
 #include <queue>
 
-class BfsPathfinder : public Pathfinder {
+class BfsPathfinder final : public Pathfinder {
 public:
     using Pathfinder::Pathfinder;
     void initialize() override;

@@ -17,6 +17,8 @@ add_executable(PFVis
     src/BfsPathfinder.cpp
     src/DfsPathfinder.h
     src/DfsPathfinder.cpp
+    src/HeuristicPathfinder.h
+    src/HeuristicPathfinder.cpp
 )
 target_compile_features(PFVis PRIVATE cxx_std_23)
 set_target_properties(PFVis PROPERTIES

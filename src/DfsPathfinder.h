@@ -3,7 +3,7 @@
 
 #include <stack>
 
-class DfsPathfinder : public Pathfinder {
+class DfsPathfinder final : public Pathfinder {
 public:
     using Pathfinder::Pathfinder;
     void initialize() override;

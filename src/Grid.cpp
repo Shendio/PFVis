@@ -43,10 +43,6 @@ void Grid::setStart(int x, int y) {
         m_startNode->state = NodeState::Empty;
     }
 
-    // Convert screen coords to grid coords
-    x = ScreenToGrid(x);
-    y = ScreenToGrid(y);
-
     if (int nodeIndex = TwoDtoOneD(x, y); nodeIndex != -1) {
         m_startNode = &m_nodes[nodeIndex];
         m_startNode->state = NodeState::Start;
@@ -58,13 +54,31 @@ void Grid::setEnd(int x, int y) {
         m_endNode->state = NodeState::Empty;
     }
 
-    // Convert screen coords to grid coords
-    x = ScreenToGrid(x);
-    y = ScreenToGrid(y);
-
     if (int nodeIndex = TwoDtoOneD(x, y); nodeIndex != -1) {
         m_endNode = &m_nodes[nodeIndex];
         m_endNode->state = NodeState::End;
+    }
+}
+
+void Grid::handleInput(int x, int y) {
+    // Convert screen cords to grid coords.
+    x /= c_nodesSize;
+    y /= c_nodesSize;
+
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+        paint(x, y, NodeState::Wall);
+    }
+
+    if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+        paint(x, y, NodeState::Empty);
+    }
+
+    if (IsKeyPressed(KEY_S)) {
+        setStart(x, y);
+    }
+
+    if (IsKeyPressed(KEY_T)) {
+        setEnd(x, y);
     }
 }
 
@@ -90,9 +104,6 @@ std::vector<Node*> Grid::getNeighbors(Node* n) {
 }
 
 void Grid::paint(int x, int y, NodeState state) {
-    x = ScreenToGrid(x);
-    y = ScreenToGrid(y);
-
     if (int nodeIndex = TwoDtoOneD(x, y); nodeIndex != -1) {
         m_nodes[nodeIndex].state = state;
     }

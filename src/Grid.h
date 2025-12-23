@@ -1,5 +1,4 @@
 #pragma once
-#include "Constants.h"
 #include "Node.h"
 
 #include <vector>
@@ -14,6 +13,7 @@ public:
     void setEnd(int x, int y);
     Node* getStart() const { return m_startNode; }
     Node* getEnd() const { return m_endNode; }
+    void handleInput(int x, int y);
 
     Node* getNode(int x, int y);
     std::vector<Node*> getNeighbors(Node* n);
@@ -25,10 +25,6 @@ public:
 private:
     const bool isValidIndex(int x, int y) const;
     const int TwoDtoOneD(int x, int y) const;
-
-    inline const int ScreenToGrid(int index) const {
-        return index / c_nodesSize;
-    }
 
     std::vector<Node> m_nodes;
     Node* m_startNode = nullptr;
