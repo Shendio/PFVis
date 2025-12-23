@@ -26,17 +26,15 @@ void Application::run() {
 }
 
 void Application::setupStyling() {
-    GuiSetStyle(DEFAULT, BACKGROUND_COLOR, ColorToInt(c_background_color));
-
     GuiSetStyle(DEFAULT, BASE_COLOR_NORMAL, ColorToInt(c_menu_color));
     GuiSetStyle(DEFAULT, BASE_COLOR_FOCUSED, ColorToInt(c_node_visited_color));
     GuiSetStyle(DEFAULT, BASE_COLOR_PRESSED, ColorToInt(c_node_start_color));
 
     GuiSetStyle(DEFAULT, TEXT_COLOR_NORMAL, ColorToInt(c_node_wall_color));
-    GuiSetStyle(DEFAULT, TEXT_COLOR_FOCUSED, ColorToInt(c_background_color));
-    GuiSetStyle(DEFAULT, TEXT_COLOR_PRESSED, ColorToInt(c_background_color));
+    GuiSetStyle(DEFAULT, TEXT_COLOR_FOCUSED, ColorToInt(c_base_color));
+    GuiSetStyle(DEFAULT, TEXT_COLOR_PRESSED, ColorToInt(c_base_color));
 
-    GuiSetStyle(DEFAULT, BORDER_COLOR_NORMAL, ColorToInt(c_background_color));
+    GuiSetStyle(DEFAULT, BORDER_COLOR_NORMAL, ColorToInt(c_base_color));
     GuiSetStyle(DEFAULT, BORDER_COLOR_FOCUSED, ColorToInt(c_node_queued_color));
     GuiSetStyle(DEFAULT, BORDER_COLOR_PRESSED, ColorToInt(c_node_start_color));
     GuiSetStyle(DEFAULT, BORDER_WIDTH, 1);
@@ -71,7 +69,6 @@ void Application::update() {
 void Application::render() {
     BeginDrawing();
 
-    ClearBackground(DARKGRAY);
     m_grid.draw();
     drawGUI();
 

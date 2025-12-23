@@ -4,7 +4,7 @@
 #include <string_view>
 
 // Theme
-inline constexpr Color c_background_color = {40, 42, 54, 255};
+inline constexpr Color c_base_color = {40, 42, 54, 255};
 inline constexpr Color c_menu_color = {68, 71, 90, 255};
 inline constexpr Color c_node_empty_color = {40, 42, 54, 255};
 inline constexpr Color c_node_wall_color = {248, 248, 242, 255};
