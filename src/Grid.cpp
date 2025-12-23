@@ -2,14 +2,18 @@
 #include "Constants.h"
 #include "Node.h"
 
+#include <algorithm>
+#include <random>
+#include <stack>
+
 #include "raylib.h"
 
 Grid::Grid() {
-    m_nodes.resize(c_gridSize * c_gridSize);
+    m_nodes.resize(c_grid_size * c_grid_size);
 
-    for (size_t i = 0; i < c_gridSize * c_gridSize; ++i) {
-        int x = i % c_gridSize;
-        int y = i / c_gridSize;
+    for (size_t i = 0; i < c_grid_size * c_grid_size; ++i) {
+        int x = i % c_grid_size;
+        int y = i / c_grid_size;
         m_nodes[i].x = x;
         m_nodes[i].y = y;
     }
@@ -18,10 +22,10 @@ Grid::Grid() {
 void Grid::reset() {
     for (auto& node : m_nodes) {
         node.reset();
-        if (&node == m_startNode) {
+        if (&node == m_start_node) {
             node.state = NodeState::Start;
         }
-        if (&node == m_endNode) {
+        if (&node == m_end_node) {
             node.state = NodeState::End;
         }
     }
@@ -35,43 +39,95 @@ void Grid::clearWalls() {
     }
 }
 
+void Grid::generateMaze() {
+    for (auto& node : m_nodes) {
+        node.state = NodeState::Wall;
+        node.reset();
+    }
+
+    std::stack<Node*> maze_stack;
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    Node* initial = nullptr;
+
+    if (m_start_node) {
+        initial = m_start_node;
+    } else {
+        initial = getNode(1, 1);
+    }
+
+    initial->state = NodeState::Empty;
+    maze_stack.push(initial);
+
+    while (!maze_stack.empty()) {
+        Node* curr = maze_stack.top();
+        maze_stack.pop();
+
+        auto neighbors = getNeighborsMaze(curr);
+
+        if (!neighbors.empty()) {
+            maze_stack.push(curr);
+            std::shuffle(neighbors.begin(), neighbors.end(), gen);
+            Node* next = neighbors[0];
+
+            next->state = NodeState::Empty;
+
+            int wall_x = curr->x + (next->x - curr->x) / 2;
+            int wall_y = curr->y + (next->y - curr->y) / 2;
+            getNode(wall_x, wall_y)->state = NodeState::Empty;
+
+            maze_stack.push(next);
+        }
+    }
+
+    if (m_start_node) {
+        m_start_node->state = NodeState::Start;
+    }
+
+    if (m_end_node) {
+        m_end_node->state = NodeState::End;
+    }
+}
+
 const bool Grid::isValidIndex(int x, int y) const {
-    return (x < c_gridSize && y < c_gridSize && x >= 0 && y >= 0);
+    return (x < c_grid_size && y < c_grid_size && x >= 0 && y >= 0);
 }
 
 const int Grid::TwoDtoOneD(int x, int y) const {
     if (isValidIndex(x, y)) {
-        return c_gridSize * y + x;
+        return c_grid_size * y + x;
     }
     return -1;
 }
 
 void Grid::setStart(int x, int y) {
-    if (m_startNode) {
-        m_startNode->state = NodeState::Empty;
+    if (m_start_node) {
+        m_start_node->state = NodeState::Empty;
     }
 
     if (int nodeIndex = TwoDtoOneD(x, y); nodeIndex != -1) {
-        m_startNode = &m_nodes[nodeIndex];
-        m_startNode->state = NodeState::Start;
+        m_start_node = &m_nodes[nodeIndex];
+        m_start_node->state = NodeState::Start;
     }
 }
 
 void Grid::setEnd(int x, int y) {
-    if (m_endNode) {
-        m_endNode->state = NodeState::Empty;
+    if (m_end_node) {
+        m_end_node->state = NodeState::Empty;
     }
 
     if (int nodeIndex = TwoDtoOneD(x, y); nodeIndex != -1) {
-        m_endNode = &m_nodes[nodeIndex];
-        m_endNode->state = NodeState::End;
+        m_end_node = &m_nodes[nodeIndex];
+        m_end_node->state = NodeState::End;
     }
 }
 
 void Grid::handleInput(int x, int y) {
     // Convert screen cords to grid coords.
-    x /= c_nodesSize;
-    y /= c_nodesSize;
+    x /= c_nodes_size;
+    y /= c_nodes_size;
 
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
         paint(x, y, NodeState::Wall);
@@ -111,6 +167,20 @@ std::vector<Node*> Grid::getNeighbors(Node* n) {
     return outVec;
 }
 
+std::vector<Node*> Grid::getNeighborsMaze(Node* n) {
+    std::vector<Node*> outVec;
+    int dx[] = {0, 0, 2, -2};
+    int dy[] = {2, -2, 0, 0};
+
+    for (size_t i = 0; i < 4; ++i) {
+        Node* neighbor = getNode(n->x + dx[i], n->y + dy[i]);
+        if (neighbor && neighbor->state == NodeState::Wall) {
+            outVec.push_back(neighbor);
+        }
+    }
+    return outVec;
+}
+
 void Grid::paint(int x, int y, NodeState state) {
     if (int nodeIndex = TwoDtoOneD(x, y); nodeIndex != -1) {
         m_nodes[nodeIndex].state = state;
@@ -144,10 +214,10 @@ void Grid::draw() {
             break;
         }
 
-        int x = (i % c_gridSize) * c_nodesSize;
-        int y = (i / c_gridSize) * c_nodesSize;
+        int x = (i % c_grid_size) * c_nodes_size;
+        int y = (i / c_grid_size) * c_nodes_size;
 
-        DrawRectangle(x, y, c_nodesSize, c_nodesSize, nodeColor);
-        DrawRectangleLines(x, y, c_nodesSize, c_nodesSize, c_grid_lines_color);
+        DrawRectangle(x, y, c_nodes_size, c_nodes_size, nodeColor);
+        DrawRectangleLines(x, y, c_nodes_size, c_nodes_size, c_grid_lines_color);
     }
 }

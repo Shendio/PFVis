@@ -9,7 +9,7 @@
 #include "raygui.h"
 
 Application::Application() {
-    InitWindow(c_defaultWidth, c_defaultHeight, c_defaultTitle.data());
+    InitWindow(c_default_width, c_default_height, c_default_title.data());
     SetTargetFPS(60);
     setupStyling();
 }
@@ -77,7 +77,7 @@ void Application::render() {
 }
 
 void Application::drawGUI() {
-    DrawRectangle(c_defaultWidth - c_menuWidth, 0, c_menuWidth, c_defaultHeight, c_menu_color);
+    DrawRectangle(c_default_width - c_menu_width, 0, c_menu_width, c_default_height, c_menu_color);
 
     if (GuiButton({850, 50, 200, 50}, m_running ? "Stop" : "Start")) {
         if (!m_running && m_grid.getStart() && m_grid.getEnd()) {
@@ -116,8 +116,12 @@ void Application::drawGUI() {
         m_grid.clearWalls();
     }
 
+    if (GuiButton({850, 550, 200, 50}, "Generuj labirynt") && !m_running) {
+        m_grid.generateMaze();
+    }
+
     if (m_pathfinder) {
-        GuiLabel({865, 550, 250, 20}, TextFormat("Ilosc operacji: %d", m_pathfinder->getOperationCount()));
+        GuiLabel({865, 650, 250, 20}, TextFormat("Ilosc operacji: %d", m_pathfinder->getOperationCount()));
     }
 
     GuiLabel({850, 750, 250, 20}, "Autor: Szymon Szedziol");

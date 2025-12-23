@@ -23,6 +23,7 @@ protected:
             }
             curr = curr->parent;
         }
+        curr->state = NodeState::Start;
     }
 
     Grid& m_grid;
