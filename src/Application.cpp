@@ -118,4 +118,7 @@ void Application::drawGUI() {
     if (m_pathfinder) {
         GuiLabel({865, 550, 250, 20}, TextFormat("Ilosc operacji: %d", m_pathfinder->getOperationCount()));
     }
+
+    GuiLabel({850, 750, 250, 20}, "Autor: Szymon Szedziol");
+    GuiLabel({885, 775, 250, 20}, "II EF-DI 179624");
 }

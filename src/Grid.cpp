@@ -2,7 +2,7 @@
 #include "Constants.h"
 #include "Node.h"
 
-#include <raylib.h>
+#include "raylib.h"
 
 Grid::Grid() {
     m_nodes.resize(c_gridSize * c_gridSize);
