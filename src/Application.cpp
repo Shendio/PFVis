@@ -1,6 +1,6 @@
 #include "Application.h"
-#include "Constants.h"
 #include "BfsPathfinder.h"
+#include "Constants.h"
 #include "DfsPathfinder.h"
 #include "HeuristicPathfinder.h"
 
@@ -83,7 +83,8 @@ void Application::drawGUI() {
         m_chosen_algorithm = static_cast<Algorithm>(selection);
     }
 
-    if (GuiButton({850, 450, 200, 50}, "Reset")) {
+    if (GuiButton({850, 450, 200, 50}, "Clear walls") && !m_running) {
         m_grid.reset();
+        m_grid.clearWalls();
     }
 }

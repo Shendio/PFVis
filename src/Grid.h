@@ -8,6 +8,7 @@ public:
     Grid();
 
     void reset();
+    void clearWalls();
 
     void setStart(int x, int y);
     void setEnd(int x, int y);

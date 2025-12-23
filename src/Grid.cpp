@@ -27,6 +27,14 @@ void Grid::reset() {
     }
 }
 
+void Grid::clearWalls() {
+    for (auto& node : m_nodes) {
+        if (node.state == NodeState::Wall) {
+            node.state = NodeState::Empty;
+        }
+    }
+}
+
 const bool Grid::isValidIndex(int x, int y) const {
     return (x < c_gridSize && y < c_gridSize && x >= 0 && y >= 0);
 }
