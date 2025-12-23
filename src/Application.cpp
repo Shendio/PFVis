@@ -26,6 +26,7 @@ void Application::run() {
 }
 
 void Application::setupStyling() {
+    GuiSetStyle(DEFAULT, BACKGROUND_COLOR, ColorToInt(c_base_color));
     GuiSetStyle(DEFAULT, BASE_COLOR_NORMAL, ColorToInt(c_menu_color));
     GuiSetStyle(DEFAULT, BASE_COLOR_FOCUSED, ColorToInt(c_node_visited_color));
     GuiSetStyle(DEFAULT, BASE_COLOR_PRESSED, ColorToInt(c_node_start_color));
