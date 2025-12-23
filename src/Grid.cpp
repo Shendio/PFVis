@@ -122,25 +122,25 @@ void Grid::draw() {
         Color nodeColor;
         switch (m_nodes[i].state) {
         case NodeState::Empty:
-            nodeColor = RAYWHITE;
+            nodeColor = c_node_empty_color;
             break;
         case NodeState::Wall:
-            nodeColor = DARKGRAY;
+            nodeColor = c_node_wall_color;
             break;
         case NodeState::Start:
-            nodeColor = GREEN;
+            nodeColor = c_node_start_color;
             break;
         case NodeState::End:
-            nodeColor = RED;
+            nodeColor = c_node_end_color;
             break;
         case NodeState::Visited:
-            nodeColor = {173, 216, 230, 255};
+            nodeColor = c_node_visited_color;
             break;
         case NodeState::Queued:
-            nodeColor = {230, 230, 250, 255};
+            nodeColor = c_node_queued_color;
             break;
         case NodeState::Path:
-            nodeColor = GOLD;
+            nodeColor = c_node_path_color;
             break;
         }
 
@@ -148,6 +148,6 @@ void Grid::draw() {
         int y = (i / c_gridSize) * c_nodesSize;
 
         DrawRectangle(x, y, c_nodesSize, c_nodesSize, nodeColor);
-        DrawRectangleLines(x, y, c_nodesSize, c_nodesSize, BLACK);
+        DrawRectangleLines(x, y, c_nodesSize, c_nodesSize, c_grid_lines_color);
     }
 }

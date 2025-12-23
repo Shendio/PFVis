@@ -43,5 +43,6 @@ bool HeuristicPathfinder::step() {
             m_openSet.push(neighbor);
         }
     }
+    m_operations++;
     return true;
 }

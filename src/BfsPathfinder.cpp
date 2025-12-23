@@ -35,5 +35,6 @@ bool BfsPathfinder::step() {
             m_queue.push(neighbor);
         }
     }
+    m_operations++;
     return true;
 }

@@ -11,6 +11,7 @@
 Application::Application() {
     InitWindow(c_defaultWidth, c_defaultHeight, c_defaultTitle.data());
     SetTargetFPS(60);
+    setupStyling();
 }
 
 Application::~Application() {
@@ -22,6 +23,35 @@ void Application::run() {
         update();
         render();
     }
+}
+
+void Application::setupStyling() {
+    GuiSetStyle(DEFAULT, BACKGROUND_COLOR, ColorToInt(c_background_color));
+
+    GuiSetStyle(DEFAULT, BASE_COLOR_NORMAL, ColorToInt(c_menu_color));
+    GuiSetStyle(DEFAULT, BASE_COLOR_FOCUSED, ColorToInt(c_node_visited_color));
+    GuiSetStyle(DEFAULT, BASE_COLOR_PRESSED, ColorToInt(c_node_start_color));
+
+    GuiSetStyle(DEFAULT, TEXT_COLOR_NORMAL, ColorToInt(c_node_wall_color));
+    GuiSetStyle(DEFAULT, TEXT_COLOR_FOCUSED, ColorToInt(c_background_color));
+    GuiSetStyle(DEFAULT, TEXT_COLOR_PRESSED, ColorToInt(c_background_color));
+
+    GuiSetStyle(DEFAULT, BORDER_COLOR_NORMAL, ColorToInt(c_background_color));
+    GuiSetStyle(DEFAULT, BORDER_COLOR_FOCUSED, ColorToInt(c_node_queued_color));
+    GuiSetStyle(DEFAULT, BORDER_COLOR_PRESSED, ColorToInt(c_node_start_color));
+    GuiSetStyle(DEFAULT, BORDER_WIDTH, 1);
+
+    GuiSetStyle(DROPDOWNBOX, BASE_COLOR_NORMAL, ColorToInt(c_menu_color));
+    GuiSetStyle(DROPDOWNBOX, BASE_COLOR_PRESSED, ColorToInt(c_menu_color));
+    GuiSetStyle(DROPDOWNBOX, BASE_COLOR_FOCUSED, ColorToInt(c_menu_color));
+
+    GuiSetStyle(DROPDOWNBOX, TEXT_COLOR_NORMAL, ColorToInt(c_node_wall_color));
+    GuiSetStyle(DROPDOWNBOX, TEXT_COLOR_FOCUSED, ColorToInt(c_node_queued_color));
+    GuiSetStyle(DROPDOWNBOX, TEXT_COLOR_PRESSED, ColorToInt(c_node_path_color));
+
+    GuiSetStyle(DROPDOWNBOX, ARROW_PADDING, 30);
+
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 20);
 }
 
 void Application::update() {
@@ -49,7 +79,7 @@ void Application::render() {
 }
 
 void Application::drawGUI() {
-    DrawRectangle(c_defaultWidth - c_menuWidth, 0, c_menuWidth, c_defaultHeight, {0, 60, 130, 255});
+    DrawRectangle(c_defaultWidth - c_menuWidth, 0, c_menuWidth, c_defaultHeight, c_menu_color);
 
     if (GuiButton({850, 50, 200, 50}, m_running ? "Stop" : "Start")) {
         if (!m_running && m_grid.getStart() && m_grid.getEnd()) {
@@ -83,8 +113,12 @@ void Application::drawGUI() {
         m_chosen_algorithm = static_cast<Algorithm>(selection);
     }
 
-    if (GuiButton({850, 450, 200, 50}, "Clear walls") && !m_running) {
+    if (GuiButton({850, 450, 200, 50}, "Reset") && !m_running) {
         m_grid.reset();
         m_grid.clearWalls();
+    }
+
+    if (m_pathfinder) {
+        GuiLabel({865, 550, 250, 20}, TextFormat("Ilosc operacji: %d", m_pathfinder->getOperationCount()));
     }
 }

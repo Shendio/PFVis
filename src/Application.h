@@ -18,6 +18,8 @@ public:
     void run();
 
 private:
+    void setupStyling();
+
     void update();
     void render();
     void drawGUI();

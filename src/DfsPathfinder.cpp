@@ -35,5 +35,6 @@ bool DfsPathfinder::step() {
             m_stack.push(neighbor);
         }
     }
+    m_operations++;
     return true;
 }
