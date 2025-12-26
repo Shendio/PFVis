@@ -11,5 +11,5 @@ public:
     bool step() override;
 
 private:
-    std::queue<Node*> m_queue;
+    std::queue<Node*> m_queue{};
 };

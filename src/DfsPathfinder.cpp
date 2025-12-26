@@ -3,13 +3,18 @@
 void DfsPathfinder::initialize() {
     m_grid.reset();
     Node* start = m_grid.getStart();
-    m_stack = std::stack<Node*>();
     m_stack.push(start);
     start->state = NodeState::Queued;
+    m_time_elapsed = std::chrono::nanoseconds{0};
+    m_last_time = std::chrono::steady_clock::now();
     m_finished = false;
 }
 
 bool DfsPathfinder::step() {
+    auto now = std::chrono::steady_clock::now();
+    m_time_elapsed += now - m_last_time;
+    m_last_time = now;
+
     if (m_stack.empty()) {
         m_finished = true;
         return false;
@@ -35,6 +40,5 @@ bool DfsPathfinder::step() {
             m_stack.push(neighbor);
         }
     }
-    m_operations++;
     return true;
 }

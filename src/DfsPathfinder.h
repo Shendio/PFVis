@@ -11,5 +11,5 @@ public:
     bool step() override;
 
 private:
-    std::stack<Node*> m_stack;
+    std::stack<Node*> m_stack{};
 };

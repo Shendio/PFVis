@@ -26,7 +26,7 @@ protected:
             return a->fCost() > b->fCost();
         }
     };
-    std::priority_queue<Node*, std::vector<Node*>, CompareNode> m_openSet;
+    std::priority_queue<Node*, std::vector<Node*>, CompareNode> m_open_set{};
     bool m_useHeuristic;
 };
 
@@ -40,4 +40,12 @@ class AStarPathfinder final : public HeuristicPathfinder {
 public:
     AStarPathfinder(Grid& grid)
         : HeuristicPathfinder(grid, true) {}
+};
+
+class GreedyBfsPathfinder final : public HeuristicPathfinder {
+public:
+    GreedyBfsPathfinder(Grid& grid)
+        : HeuristicPathfinder(grid, true) {}
+
+    bool step() override;
 };

@@ -3,9 +3,11 @@
 #include "Grid.h"
 #include "Pathfinder.h"
 
+#include "raylib.h"
+
 #include <memory>
 
-enum class Algorithm : uint8_t { BFS, DFS, Dijkstra, Astar };
+enum class Algorithm : uint8_t { BFS, DFS, Dijkstra, Astar, GreedyBeFS };
 
 class Application {
 public:
@@ -23,6 +25,8 @@ private:
     void update();
     void render();
     void drawGUI();
+
+    Font m_font;
 
     Grid m_grid;
     std::unique_ptr<Pathfinder> m_pathfinder = nullptr;

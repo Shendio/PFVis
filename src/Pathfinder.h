@@ -2,6 +2,8 @@
 
 #include "Grid.h"
 
+#include <chrono>
+
 class Pathfinder {
 public:
     explicit Pathfinder(Grid& grid)
@@ -11,7 +13,9 @@ public:
     virtual void initialize() = 0;
     virtual bool step() = 0;
 
-    const uint16_t getOperationCount() const { return m_operations; }
+    const float getTimeElapsed() const {
+        return std::chrono::duration<float, std::milli>(m_time_elapsed).count() / 1000;
+    }
 
 protected:
     void reconstructPath(Node* end) {
@@ -28,5 +32,7 @@ protected:
 
     Grid& m_grid;
     bool m_finished = false;
-    uint16_t m_operations = 0;
+
+    std::chrono::nanoseconds m_time_elapsed;
+    std::chrono::steady_clock::time_point m_last_time;
 };

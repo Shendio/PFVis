@@ -3,13 +3,18 @@
 void BfsPathfinder::initialize() {
     m_grid.reset();
     Node* start = m_grid.getStart();
-    m_queue = std::queue<Node*>();
     m_queue.push(start);
     start->state = NodeState::Queued;
+    m_time_elapsed = std::chrono::nanoseconds{0};
+    m_last_time = std::chrono::steady_clock::now();
     m_finished = false;
 }
 
 bool BfsPathfinder::step() {
+    auto now = std::chrono::steady_clock::now();
+    m_time_elapsed += now - m_last_time;
+    m_last_time = now;
+
     if (m_queue.empty()) {
         m_finished = true;
         return false;
@@ -35,6 +40,5 @@ bool BfsPathfinder::step() {
             m_queue.push(neighbor);
         }
     }
-    m_operations++;
     return true;
 }

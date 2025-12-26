@@ -4,7 +4,6 @@
 #include "DfsPathfinder.h"
 #include "HeuristicPathfinder.h"
 
-#include "raylib.h"
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
 
@@ -26,6 +25,10 @@ void Application::run() {
 }
 
 void Application::setupStyling() {
+    m_font = LoadFont("assets/Inter.ttf");
+    SetTextureFilter(m_font.texture, TEXTURE_FILTER_TRILINEAR);
+    GuiSetFont(m_font);
+
     GuiSetStyle(DEFAULT, BACKGROUND_COLOR, ColorToInt(c_base_color));
     GuiSetStyle(DEFAULT, BASE_COLOR_NORMAL, ColorToInt(c_menu_color));
     GuiSetStyle(DEFAULT, BASE_COLOR_FOCUSED, ColorToInt(c_node_visited_color));
@@ -94,6 +97,9 @@ void Application::drawGUI() {
             case Algorithm::Astar:
                 m_pathfinder = std::make_unique<AStarPathfinder>(m_grid);
                 break;
+            case Algorithm::GreedyBeFS:
+                m_pathfinder = std::make_unique<GreedyBfsPathfinder>(m_grid);
+                break;
             default:
                 std::unreachable();
             }
@@ -106,22 +112,22 @@ void Application::drawGUI() {
 
     int selection = static_cast<int>(m_chosen_algorithm);
 
-    if (GuiDropdownBox({850, 150, 200, 50}, "BFS;DFS;Dijkstra;A*", &selection, m_dropdown_active)) {
+    if (GuiDropdownBox({850, 150, 200, 50}, "BFS;DFS;Dijkstra;A*;Greedy BeFS", &selection, m_dropdown_active)) {
         m_dropdown_active = !m_dropdown_active;
         m_chosen_algorithm = static_cast<Algorithm>(selection);
     }
 
-    if (GuiButton({850, 450, 200, 50}, "Reset") && !m_running) {
+    if (GuiButton({850, 500, 200, 50}, "Reset") && !m_running) {
         m_grid.reset();
         m_grid.clearWalls();
     }
 
-    if (GuiButton({850, 550, 200, 50}, "Generuj labirynt") && !m_running) {
+    if (GuiButton({850, 600, 200, 50}, "Generuj labirynt") && !m_running) {
         m_grid.generateMaze();
     }
 
     if (m_pathfinder) {
-        GuiLabel({865, 650, 250, 20}, TextFormat("Ilosc operacji: %d", m_pathfinder->getOperationCount()));
+        GuiLabel({870, 700, 250, 20}, TextFormat("Czas pracy: %.2f s", m_pathfinder->getTimeElapsed()));
     }
 
     GuiLabel({850, 750, 250, 20}, "Autor: Szymon Szedziol");
