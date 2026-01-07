@@ -1,10 +1,11 @@
 #pragma once
 
+#include <cstdint>
 #include <string_view>
 
 namespace Utils {
-    inline constexpr unsigned int toHex(int r, int g, int b, int a = 255) {
-        return ((r & 0xFF) << 24 | (g & 0xFF) << 16 | (b & 0xFF) << 8 | (a & 0xFF));
+    inline constexpr unsigned int toHex(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255) {
+        return (r << 24 | g << 16 | b << 8 | a);
     }
 }
 

@@ -26,8 +26,8 @@ public:
     void draw();
 
 private:
-    const bool isValidIndex(int x, int y) const;
-    const int TwoDtoOneD(int x, int y) const;
+    bool isValidIndex(int x, int y) const;
+    int TwoDtoOneD(int x, int y) const;
 
     std::vector<Node> m_nodes;
     Node* m_start_node = nullptr;

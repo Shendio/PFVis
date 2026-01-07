@@ -91,11 +91,11 @@ void Grid::generateMaze() {
     }
 }
 
-const bool Grid::isValidIndex(int x, int y) const {
+bool Grid::isValidIndex(int x, int y) const {
     return (x < Settings::grid_size && y < Settings::grid_size && x >= 0 && y >= 0);
 }
 
-const int Grid::TwoDtoOneD(int x, int y) const {
+int Grid::TwoDtoOneD(int x, int y) const {
     if (isValidIndex(x, y)) {
         return Settings::grid_size * y + x;
     }
@@ -220,6 +220,8 @@ void Grid::draw() {
         case NodeState::Path:
             nodeColor = GetColor(Theme::node_path_color);
             break;
+        default:
+            std::unreachable();
         }
 
         int x = node.x * Settings::nodes_size;
