@@ -13,7 +13,7 @@ struct Node {
     float gCost = std::numeric_limits<float>::infinity();
     float hCost = 0.f;
 
-    inline float fCost() const {
+    float fCost() const {
         return gCost + hCost;
     }
 

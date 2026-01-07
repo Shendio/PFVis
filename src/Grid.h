@@ -7,6 +7,9 @@ class Grid {
 public:
     Grid();
 
+    Grid(const Grid& other) = delete;
+    Grid& operator=(const Grid& other) = delete;
+
     void reset();
     void clearWalls();
     void generateMaze();
