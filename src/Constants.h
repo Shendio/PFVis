@@ -1,24 +1,32 @@
 #pragma once
 
-#include "raylib.h"
 #include <string_view>
 
-// Theme
-inline constexpr Color c_base_color = {40, 42, 54, 255};
-inline constexpr Color c_menu_color = {68, 71, 90, 255};
-inline constexpr Color c_node_empty_color = {40, 42, 54, 255};
-inline constexpr Color c_node_wall_color = {218, 218, 218, 255};
-inline constexpr Color c_node_start_color = {80, 250, 123, 255};
-inline constexpr Color c_node_end_color = {255, 85, 85, 255};
-inline constexpr Color c_node_visited_color = {65, 75, 120, 255};
-inline constexpr Color c_node_queued_color = {139, 233, 253, 255};
-inline constexpr Color c_node_path_color = {241, 250, 140, 255};
-inline constexpr Color c_grid_lines_color = {98, 114, 164, 80};
+namespace Utils {
+    inline constexpr unsigned int toHex(int r, int g, int b, int a = 255) {
+        return ((r & 0xFF) << 24 | (g & 0xFF) << 16 | (b & 0xFF) << 8 | (a & 0xFF));
+    }
+}
 
-inline constexpr int c_default_width = 1100;
-inline constexpr int c_default_height = 800;
-inline constexpr std::string_view c_default_title = "Wizualizacja algorytmów szukania ścieżki";
-inline constexpr int c_menu_width = 300;
+namespace Theme {
+    inline constexpr unsigned int base_color = Utils::toHex(40, 42, 54);
+    inline constexpr unsigned int menu_color = Utils::toHex(68, 71, 90);
+    inline constexpr unsigned int node_empty_color = Utils::toHex(40, 42, 54);
+    inline constexpr unsigned int node_wall_color = Utils::toHex(218, 218, 218);
+    inline constexpr unsigned int node_start_color = Utils::toHex(80, 250, 123);
+    inline constexpr unsigned int node_end_color = Utils::toHex(255, 85, 85);
+    inline constexpr unsigned int node_visited_color = Utils::toHex(65, 75, 120);
+    inline constexpr unsigned int node_queued_color = Utils::toHex(139, 233, 253);
+    inline constexpr unsigned int node_path_color = Utils::toHex(241, 250, 140);
+    inline constexpr unsigned int grid_lines_color = Utils::toHex(98, 114, 164, 80);
+}
 
-inline constexpr int c_grid_size = 40;
-inline constexpr int c_nodes_size = 20;
+namespace Settings {
+    inline constexpr int default_width = 1100;
+    inline constexpr int default_height = 800;
+    inline constexpr std::string_view default_title = "Wizualizacja algorytmów szukania ścieżki";
+    inline constexpr int menu_width = 300;
+
+    inline constexpr int grid_size = 40;
+    inline constexpr int nodes_size = 20;
+}

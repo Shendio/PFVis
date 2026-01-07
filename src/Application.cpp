@@ -8,12 +8,13 @@
 #include "raygui.h"
 
 Application::Application() {
-    InitWindow(c_default_width, c_default_height, c_default_title.data());
+    InitWindow(Settings::default_width, Settings::default_height, Settings::default_title.data());
     SetTargetFPS(60);
     setupStyling();
 }
 
 Application::~Application() {
+    UnloadFont(m_font);
     CloseWindow();
 }
 
@@ -29,27 +30,27 @@ void Application::setupStyling() {
     SetTextureFilter(m_font.texture, TEXTURE_FILTER_TRILINEAR);
     GuiSetFont(m_font);
 
-    GuiSetStyle(DEFAULT, BACKGROUND_COLOR, ColorToInt(c_base_color));
-    GuiSetStyle(DEFAULT, BASE_COLOR_NORMAL, ColorToInt(c_menu_color));
-    GuiSetStyle(DEFAULT, BASE_COLOR_FOCUSED, ColorToInt(c_node_visited_color));
-    GuiSetStyle(DEFAULT, BASE_COLOR_PRESSED, ColorToInt(c_node_start_color));
+    GuiSetStyle(DEFAULT, BACKGROUND_COLOR, Theme::base_color);
+    GuiSetStyle(DEFAULT, BASE_COLOR_NORMAL, Theme::menu_color);
+    GuiSetStyle(DEFAULT, BASE_COLOR_FOCUSED, Theme::node_visited_color);
+    GuiSetStyle(DEFAULT, BASE_COLOR_PRESSED, Theme::node_start_color);
 
-    GuiSetStyle(DEFAULT, TEXT_COLOR_NORMAL, ColorToInt(c_node_wall_color));
-    GuiSetStyle(DEFAULT, TEXT_COLOR_FOCUSED, ColorToInt(c_base_color));
-    GuiSetStyle(DEFAULT, TEXT_COLOR_PRESSED, ColorToInt(c_base_color));
+    GuiSetStyle(DEFAULT, TEXT_COLOR_NORMAL, Theme::node_wall_color);
+    GuiSetStyle(DEFAULT, TEXT_COLOR_FOCUSED, Theme::base_color);
+    GuiSetStyle(DEFAULT, TEXT_COLOR_PRESSED, Theme::base_color);
 
-    GuiSetStyle(DEFAULT, BORDER_COLOR_NORMAL, ColorToInt(c_base_color));
-    GuiSetStyle(DEFAULT, BORDER_COLOR_FOCUSED, ColorToInt(c_node_queued_color));
-    GuiSetStyle(DEFAULT, BORDER_COLOR_PRESSED, ColorToInt(c_node_start_color));
+    GuiSetStyle(DEFAULT, BORDER_COLOR_NORMAL, Theme::base_color);
+    GuiSetStyle(DEFAULT, BORDER_COLOR_FOCUSED, Theme::node_queued_color);
+    GuiSetStyle(DEFAULT, BORDER_COLOR_PRESSED, Theme::node_start_color);
     GuiSetStyle(DEFAULT, BORDER_WIDTH, 1);
 
-    GuiSetStyle(DROPDOWNBOX, BASE_COLOR_NORMAL, ColorToInt(c_menu_color));
-    GuiSetStyle(DROPDOWNBOX, BASE_COLOR_PRESSED, ColorToInt(c_menu_color));
-    GuiSetStyle(DROPDOWNBOX, BASE_COLOR_FOCUSED, ColorToInt(c_menu_color));
+    GuiSetStyle(DROPDOWNBOX, BASE_COLOR_NORMAL, Theme::menu_color);
+    GuiSetStyle(DROPDOWNBOX, BASE_COLOR_PRESSED, Theme::menu_color);
+    GuiSetStyle(DROPDOWNBOX, BASE_COLOR_FOCUSED, Theme::menu_color);
 
-    GuiSetStyle(DROPDOWNBOX, TEXT_COLOR_NORMAL, ColorToInt(c_node_wall_color));
-    GuiSetStyle(DROPDOWNBOX, TEXT_COLOR_FOCUSED, ColorToInt(c_node_queued_color));
-    GuiSetStyle(DROPDOWNBOX, TEXT_COLOR_PRESSED, ColorToInt(c_node_path_color));
+    GuiSetStyle(DROPDOWNBOX, TEXT_COLOR_NORMAL, Theme::node_wall_color);
+    GuiSetStyle(DROPDOWNBOX, TEXT_COLOR_FOCUSED, Theme::node_queued_color);
+    GuiSetStyle(DROPDOWNBOX, TEXT_COLOR_PRESSED, Theme::node_path_color);
 
     GuiSetStyle(DROPDOWNBOX, ARROW_PADDING, 30);
 
@@ -80,7 +81,7 @@ void Application::render() {
 }
 
 void Application::drawGUI() {
-    DrawRectangle(c_default_width - c_menu_width, 0, c_menu_width, c_default_height, c_menu_color);
+    DrawRectangle(Settings::default_height, 0, Settings::menu_width, Settings::default_height, GetColor(Theme::menu_color));
 
     if (GuiButton({850, 50, 200, 50}, m_running ? "Stop" : "Start")) {
         if (!m_running && m_grid.getStart() && m_grid.getEnd()) {

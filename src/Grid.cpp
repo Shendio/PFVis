@@ -9,11 +9,11 @@
 #include "raylib.h"
 
 Grid::Grid() {
-    m_nodes.resize(c_grid_size * c_grid_size);
+    m_nodes.resize(Settings::grid_size * Settings::grid_size);
 
-    for (size_t i = 0; i < c_grid_size * c_grid_size; ++i) {
-        int x = i % c_grid_size;
-        int y = i / c_grid_size;
+    for (size_t i = 0; i < Settings::grid_size * Settings::grid_size; ++i) {
+        int x = i % Settings::grid_size;
+        int y = i / Settings::grid_size;
         m_nodes[i].x = x;
         m_nodes[i].y = y;
     }
@@ -92,12 +92,12 @@ void Grid::generateMaze() {
 }
 
 const bool Grid::isValidIndex(int x, int y) const {
-    return (x < c_grid_size && y < c_grid_size && x >= 0 && y >= 0);
+    return (x < Settings::grid_size && y < Settings::grid_size && x >= 0 && y >= 0);
 }
 
 const int Grid::TwoDtoOneD(int x, int y) const {
     if (isValidIndex(x, y)) {
-        return c_grid_size * y + x;
+        return Settings::grid_size * y + x;
     }
     return -1;
 }
@@ -126,8 +126,8 @@ void Grid::setEnd(int x, int y) {
 
 void Grid::handleInput(int x, int y) {
     // Convert screen cords to grid coords.
-    x /= c_nodes_size;
-    y /= c_nodes_size;
+    x /= Settings::nodes_size;
+    y /= Settings::nodes_size;
 
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
         paint(x, y, NodeState::Wall);
@@ -155,8 +155,10 @@ Node* Grid::getNode(int x, int y) {
 
 std::vector<Node*> Grid::getNeighbors(Node* n) {
     std::vector<Node*> outVec;
-    int dx[] = {0, 0, 1, -1};
-    int dy[] = {1, -1, 0, 0};
+    outVec.reserve(4);
+
+    static constexpr std::array<int, 4> dx = {0, 0, 1, -1};
+    static constexpr std::array<int, 4> dy = {1, -1, 0, 0};
 
     for (size_t i = 0; i < 4; ++i) {
         Node* neighbor = getNode(n->x + dx[i], n->y + dy[i]);
@@ -169,8 +171,10 @@ std::vector<Node*> Grid::getNeighbors(Node* n) {
 
 std::vector<Node*> Grid::getNeighborsMaze(Node* n) {
     std::vector<Node*> outVec;
-    int dx[] = {0, 0, 2, -2};
-    int dy[] = {2, -2, 0, 0};
+    outVec.reserve(4);
+
+    static constexpr std::array<int, 4> dx = {0, 0, 2, -2};
+    static constexpr std::array<int, 4> dy = {2, -2, 0, 0};
 
     for (size_t i = 0; i < 4; ++i) {
         Node* neighbor = getNode(n->x + dx[i], n->y + dy[i]);
@@ -182,42 +186,46 @@ std::vector<Node*> Grid::getNeighborsMaze(Node* n) {
 }
 
 void Grid::paint(int x, int y, NodeState state) {
+    if (getNode(x, y)->state == NodeState::Start || getNode(x, y)->state == NodeState::End) {
+        return;
+    }
+
     if (int nodeIndex = TwoDtoOneD(x, y); nodeIndex != -1) {
         m_nodes[nodeIndex].state = state;
     }
 }
 
 void Grid::draw() {
-    for (size_t i = 0; i < m_nodes.size(); ++i) {
+    for (auto& node : m_nodes) {
         Color nodeColor;
-        switch (m_nodes[i].state) {
+        switch (node.state) {
         case NodeState::Empty:
-            nodeColor = c_node_empty_color;
+            nodeColor = GetColor(Theme::node_empty_color);
             break;
         case NodeState::Wall:
-            nodeColor = c_node_wall_color;
+            nodeColor = GetColor(Theme::node_wall_color);
             break;
         case NodeState::Start:
-            nodeColor = c_node_start_color;
+            nodeColor = GetColor(Theme::node_start_color);
             break;
         case NodeState::End:
-            nodeColor = c_node_end_color;
+            nodeColor = GetColor(Theme::node_end_color);
             break;
         case NodeState::Visited:
-            nodeColor = c_node_visited_color;
+            nodeColor = GetColor(Theme::node_visited_color);
             break;
         case NodeState::Queued:
-            nodeColor = c_node_queued_color;
+            nodeColor = GetColor(Theme::node_queued_color);
             break;
         case NodeState::Path:
-            nodeColor = c_node_path_color;
+            nodeColor = GetColor(Theme::node_path_color);
             break;
         }
 
-        int x = (i % c_grid_size) * c_nodes_size;
-        int y = (i / c_grid_size) * c_nodes_size;
+        int x = node.x * Settings::nodes_size;
+        int y = node.y * Settings::nodes_size;
 
-        DrawRectangle(x, y, c_nodes_size, c_nodes_size, nodeColor);
-        DrawRectangleLines(x, y, c_nodes_size, c_nodes_size, c_grid_lines_color);
+        DrawRectangle(x, y, Settings::nodes_size, Settings::nodes_size, nodeColor);
+        DrawRectangleLines(x, y, Settings::nodes_size, Settings::nodes_size, GetColor(Theme::grid_lines_color));
     }
 }

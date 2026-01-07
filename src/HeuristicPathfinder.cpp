@@ -31,6 +31,7 @@ bool HeuristicPathfinder::step() {
 
     if (curr == m_grid.getEnd()) {
         reconstructPath(curr);
+        curr->state = NodeState::End;
         m_finished = true;
         return false;
     }
@@ -74,6 +75,7 @@ bool GreedyBfsPathfinder::step() {
 
     if (curr == m_grid.getEnd()) {
         reconstructPath(curr);
+        curr->state = NodeState::End;
         m_finished = true;
         return false;
     }
